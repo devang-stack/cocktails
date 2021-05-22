@@ -1,19 +1,33 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-export default function Cocktail({ image, name, id, info, glass }) {
+import { useGlobalContext } from '../context'
+export default function SearchForm() {
+  const { setSearchTerm } = useGlobalContext()
+  const searchValue = React.useRef('')
+
+  React.useEffect(() => {
+    searchValue.current.focus()
+  }, [])
+
+  function searchCocktail() {
+    setSearchTerm(searchValue.current.value)
+  }
+  function handleSubmit(e) {
+    e.preventDefault()
+  }
   return (
-    <article className='cocktail'>
-      <div className='img-container'>
-        <img src={image} alt={name} />
-      </div>
-      <div className='cocktail-footer'>
-        <h3>{name}</h3>
-        <h4>{glass}</h4>
-        <p>{info}</p>
-        <Link to={`/cocktail/${id}`} className='btn btn-primary btn-details'>
-          details
-        </Link>
-      </div>
-    </article>
+    <section className='section search'>
+      <form className='search-form' onSubmit={handleSubmit}>
+        <div className='form-control'>
+          <label htmlFor='name'>search your favorite cocktail</label>
+          <input
+            type='text'
+            name='name'
+            id='name'
+            ref={searchValue}
+            onChange={searchCocktail}
+          />
+        </div>
+      </form>
+    </section>
   )
 }
